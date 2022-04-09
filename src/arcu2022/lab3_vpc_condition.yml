@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+Resources:
+  myVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: 'false'
+      EnableDnsHostnames: 'false'
+      InstanceTenancy: !If
+        - VpcTenancy
+        - dedicated
+        - !Ref AWS::NoValue
+      Tags:
+        - Key: foo
+          Value: bar
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: d0fcf521-00ee-4b09-a44f-c85534f01aba
+Metadata:
+  'AWS::CloudFormation::Designer':
+    d0fcf521-00ee-4b09-a44f-c85534f01aba:
+      size:
+        width: 150
+        height: 150
+      position:
+        x: 60
+        'y': 90
+      z: 1
+      embeds: []
+Parameters:
+  Tenancy:
+    Type: String
+    Default: Default
+    AllowedValues:
+      - Default
+      - Dedicated
+Conditions:
+  VpcTenancy: !Equals 
+    - !Ref Tenancy
+    - Dedicated
